@@ -2,7 +2,7 @@
 A Wireshark Lua plugin to decode/dissect Google Protobuf messages
 
 This is a full Wireshark plugin to display [Google Protobuf](https://developers.google.com/protocol-buffers/) message packets, with the following features:
-* **Custom proto file decode**: give it your .proto files, and it will decode them in UDP packets, using their field names, enum values, etc.
+* **Custom proto file decode**: give it your .proto files, and it will decode them in TCP packets, using their field names, enum values, etc.
 * **Generic protobuf decode**: don't give it your .proto files, and it will decode generic protobuf info.
 * **Protobuf v2 support**: supports almost every field type that exists in Protobuf v2. (see Limitations below)
 * **Expert info for missing things**: generates Wireshark expert info if a required field is missing, or if two oneof fields are used, etc.
@@ -17,7 +17,7 @@ Copy this entire directory of files into your Wireshark "Personal Plugins" folde
 
 **Tip**: to find out where your Personal Plugins folder is, open Wireshark and go to **Help->About Wireshark** and it will be listed in the **Folders** tab. You may need to create the folder the first time.
 
-Then start Wireshark, open a file with your Protobuf packets, select one of those packets, right-click and select "Decode as..." and scroll down to the name of your outer-most Message type. To make this happen all the time for a UDP port, go to "Edit->Preferences->Protocols", fnd your outer-most Message type, and put the UDP port number in the field shown (or a range of port numbers if it can be more than one port).
+Then start Wireshark, open a file with your Protobuf packets, select one of those packets, right-click and select "Decode as..." and scroll down to the name of your outer-most Message type. To make this happen all the time for a TCP port, go to "Edit->Preferences->Protocols", fnd your outer-most Message type, and put the TCP port number in the field shown (or a range of port numbers if it can be more than one port).
 
 The "outer-most Message type" is the Protobuf 'message' identifier name in your .proto file, but in all capital letters. You'll see that every Protobuf 'message' idenfitier name creates a new protocol in Wireshark; you can use one or all of them a the outer-most Message type. (see details in the 'How it works' section below)
 
@@ -57,7 +57,7 @@ Each field inside a 'message' becomes a Wireshark Lua `ProtoField` object, regis
 
 
 ## TODO:
-* Support TCP somehow. Right now it's just Protobuf in UDP. Technically Protobuf can't be sent natively in TCP, because it has no framing to delimit the outer message (it would never end, technically). There are some tricks people play, however, to get it to work over TCP.
+* Support TCP somehow. Right now it's just Protobuf in TCP. Technically Protobuf can't be sent natively in TCP, because it has no framing to delimit the outer message (it would never end, technically). There are some tricks people play, however, to get it to work over TCP.
 * Support the 'default' option such that we show it as a generated field value if it's not in the packet.
 * Support packed encoding mode for v2 - i.e., the "packed=true" option for repeated statements.
 * Support Protobuf v3. There isn't much difference between v2 and v3 in terms of on-the-wire encoding. Mostly it's just that it's always in packed encoding mode, and there's a new "map" type, which is really just encoded like a message. So I think adding v3 support might be easy.
